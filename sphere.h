@@ -20,7 +20,7 @@ public:
 
 class Plane : public Shape {
     private:
-    vec3 color = vec3(0, 1, 0);
+    const vec3 color;
     public:
     vec3 normal;
     float d;
@@ -55,7 +55,7 @@ class Plane : public Shape {
 
 class Sphere : public Shape {
     private:
-    vec3 color = vec3(1, 0, 0);
+    const vec3 color;
 
     public:
     float radius;
@@ -90,7 +90,6 @@ class Sphere : public Shape {
 
         else {
             // cout << "origin: " << origin << " direction: " << direction << endl;
-            color = vec3(0, 0, 1);
             return (-b + sqrt(discriminant)) / (2.0 * a);
         }
     }
@@ -110,14 +109,12 @@ class Sphere : public Shape {
         if (root1 > 0)
         {
             // cout << "1 origin: " << origin << " direction: " << direction << " id " << id << endl;
-            color = vec3(0, 100, 0);
             return root1;
         }
 
         else {
             // cout << root1 << " a " << a << " b " << b << " c " << c << " disc " << discriminant << endl;
             // cout << "2 origin: " << origin << " direction: " << direction << " id " << id << endl;
-            color = vec3(0, 0, 100);
             // cout << (-b + sqrt(discriminant)) / (2.0 * a) << endl;
             return (-b + sqrt(discriminant)) / (2.0 * a);
         }

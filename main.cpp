@@ -10,7 +10,7 @@ using namespace std;
 #include <vector>
 
 vec3 Radiance(Light light,vec3 pointLocal,vec3 normal,vec3 lightDir,vector<Shape*>& scene, string Type,vec3 colorObj){
-    vec3 color = vec3(0,0,0);
+    vec3 color;
     Ray rayLight = Ray(light.position, lightDir);
     // check if the light is visible from the point
     float minT = INFINITY;
@@ -67,7 +67,6 @@ vector<vec3> Render(vector<Shape*>& scene, Camera cam, Film *film, Light light, 
                         vec3 normal = (pointLocal - scene[i]->getCenter()).unit();
                         vec3 lightDir = (pointLocal - light.position).unit();
                         sampleColor = Radiance(light,pointLocal,normal,lightDir,scene,"Sphere",scene[i]->getColor());
-                        cout << scene[i]->getColor() << endl;
                     }
                     if (scene[i]->getName() == "Plane") {
                         vec3 normal = scene[i]->getNormal();
