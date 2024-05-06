@@ -42,10 +42,6 @@ class Camera{
         float halfHeight = tan(fov/2);
         this->dy = focalLength * halfHeight;
         this->dx = dy * ratio;
-        screenTopLeft = vec3(-dx,dy,-focalLength);
-        screenTopRight = vec3(dx,dy,-focalLength);
-        screenBottomLeft = vec3(-dx,-dy,-focalLength);
-        screenBottomRight = vec3(dx,-dy,-focalLength);
     };
 
     Ray generateRay(float nx, float ny){

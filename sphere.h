@@ -10,7 +10,7 @@ public:
     virtual ~Shape() {} // Destrutor virtual para permitir destruição correta
     // ... outros métodos comuns a todas as formas
     virtual string getName() const { return "Shape"; }
-    virtual vec3 getColor() const { return vec3(1, 0, 0); }
+    virtual vec3 getColor() const { }
     virtual vec3 getNormal() const = 0; // Método virtual puro
     virtual float rayIntersection(const vec3& origin, const vec3& direction) = 0;
     virtual float rayIntersection(const vec3& origin, const vec3& direction, int id) = 0;
@@ -19,13 +19,15 @@ public:
 };
 
 class Plane : public Shape {
-public:
+    private:
+    vec3 color = vec3(0, 1, 0);
+    public:
     vec3 normal;
     float d;
     string getName() const override { return "Plane"; }
-    vec3 getColor() const override { return vec3(0, 1, 0); }
+    vec3 getColor() const override { return color;}
     vec3 getNormal() const { return normal; }
-    Plane(const vec3& n, float d) : normal(n), d(d) {}
+    Plane(const vec3& n, float d, vec3 c) : normal(n), d(d),  color(c){}
     Plane() : normal(vec3(0, 0, 1)), d(0) {}
     Plane(float a, float b, float c, float d) : normal(vec3(a, b, c)), d(d) {}
 
@@ -52,29 +54,22 @@ public:
 };
 
 class Sphere : public Shape {
+    private:
+    vec3 color = vec3(1, 0, 0);
+
     public:
     float radius;
     vec3 center;
     string name = "Sphere";
-    vec3 color = vec3(1, 0, 0);
     vec3 getNormal() const override { return vec3(0, 0, 0); }
     vec3 getColor() const override { return color; }
     string getName() const override { return name; }
     Sphere(float r, vec3 c) : radius(r), center(c) {}
     Sphere() : radius(1), center(vec3(0, 0, 0)) {}
-    Sphere(float r, float x, float y, float z) : radius(r), center(vec3(x, y, z)) {}
+    Sphere(float r, float x, float y, float z,float R, float G, float B) : radius(r), center(vec3(x, y, z)), color(vec3(R,G,B)) {}
 
     vec3 getCenter() const override { return center; } // Implementação para Sphere
 
-    void setColor(const vec3& color)
-    {
-        this->color = color;
-    }
-
-    void setColor(float r, float g, float b)
-    {
-        this->color = vec3(r, g, b);
-    }
 
     float rayIntersection(const vec3& origin, const vec3& direction)
     {
@@ -139,4 +134,3 @@ ostream& operator<<(ostream& os, const Sphere& s)
     os << "Sphere(" << s.radius << ", " << s.center << ")";
     return os;
 }
-

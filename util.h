@@ -18,9 +18,9 @@ void ImgPPMExport(const char* filename,int width, int height, const std::vector<
     for (int i = height - 1; i >= 0; --i) {
         for (int j = 0; j < width; ++j) {
             int index = i * width + j;
-            int ir = int(255.99 * pixels[index].x);
-            int ig = int(255.99 * pixels[index].y);
-            int ib = int(255.99 * pixels[index].z);
+            int ir = int(255.99 * clamp(pixels[index].x, 0.0f, 1.0f));
+            int ig = int(255.99 * clamp(pixels[index].y, 0.0f, 1.0f));
+            int ib = int(255.99 * clamp(pixels[index].z, 0.0f, 1.0f));
             ppmFile << ir << " " << ig << " " << ib << "\n";
         }
     }
