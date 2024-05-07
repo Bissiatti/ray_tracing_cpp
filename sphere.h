@@ -28,8 +28,8 @@ class Plane : public Shape {
     vec3 getColor() const override { return color;}
     vec3 getNormal() const { return normal; }
     Plane(const vec3& n, float d, vec3 c) : normal(n), d(d),  color(c){}
-    Plane() : normal(vec3(0, 0, 1)), d(0) {}
-    Plane(float a, float b, float c, float d) : normal(vec3(a, b, c)), d(d) {}
+    Plane() : normal(vec3(0, 0, 1)), d(0), color(0,1,0) {}
+    Plane(float a, float b, float c, float d,float R, float G, float B) : normal(vec3(a, b, c)), d(d), color(vec3(R,G,B)) {}
 
     float rayIntersection(const vec3& origin, const vec3& direction) {
         float t = -(normal.dot(origin) + d) / normal.dot(direction);
@@ -64,8 +64,8 @@ class Sphere : public Shape {
     vec3 getNormal() const override { return vec3(0, 0, 0); }
     vec3 getColor() const override { return color; }
     string getName() const override { return name; }
-    Sphere(float r, vec3 c) : radius(r), center(c) {}
-    Sphere() : radius(1), center(vec3(0, 0, 0)) {}
+    Sphere(float r, vec3 c,vec3 rgb) : radius(r), center(c),color(rgb) {}
+    Sphere() : radius(1), center(vec3(0, 0, 0)), color(vec3(1,0,0)) {}
     Sphere(float r, float x, float y, float z,float R, float G, float B) : radius(r), center(vec3(x, y, z)), color(vec3(R,G,B)) {}
 
     vec3 getCenter() const override { return center; } // Implementação para Sphere

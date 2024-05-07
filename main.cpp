@@ -101,7 +101,7 @@ int main() {
 
     vector<Shape*> scene;
     scene.push_back(new Sphere(0.5, 5,0,1, 1,0,0));
-    scene.push_back(new Plane(vec3(0, 1, 0), -3,vec3(0,1,0)));
+    scene.push_back(new Plane(vec3(0, 0, 1), -3,vec3(0,1,0)));
     
     cout << scene[0]->getColor() << endl;
 
@@ -111,7 +111,7 @@ int main() {
 
     cout << scene.size() << endl;
 
-    Render(scene, cam, &film,light,1);
+    Render(scene, cam, &film,light,200);
 
     cout << height*width <<endl;
     cout << film.resolution*film.resolution*cam.ratio << endl;
