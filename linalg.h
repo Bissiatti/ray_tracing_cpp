@@ -242,6 +242,14 @@ public:
         return *this;
     }
 
+    vec3 max(const vec3& other) const {
+        if (x+ y + z > other.x + other.y + other.z) {
+            return *this;
+        } else {
+            return other;
+        }
+    }
+
     float length() const {
         return sqrt(x * x + y * y + z * z);
     }
