@@ -53,8 +53,11 @@ class RectangleLight
     vec3 height;
     vec3 position;
     float intensity;
+    float area;
     vec3 color = vec3(1, 1, 1);
-    RectangleLight(const vec3& p, const vec3& n, vec3 w, vec3 h, float i) : position(p), normal(n), width(w), height(h), intensity(i/(width * height).length()) {};
+    RectangleLight(const vec3& p, const vec3& n, vec3 w, vec3 h, float i) : position(p), normal(n), width(w), height(h), intensity(i) {
+        area = (width.cross(height)).length();
+    };
 
     void setColor(const vec3& color)
     {

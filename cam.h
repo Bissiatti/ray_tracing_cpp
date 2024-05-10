@@ -50,7 +50,7 @@ class Camera{
         vec3 o = rotationMatrix * vec3(0,0,0);
         vec3 d = rotationMatrix * p;
         // cout << (d-o) << endl;
-        return Ray(eye, (o-d).unit());
+        return Ray(center, (o-d).unit());
         // nx++;
         // ny++;
         // float x = (nx + 0.5) /nx;

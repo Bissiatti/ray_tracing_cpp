@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include "linalg.h"
+#pragma once
 
 using namespace std;
 

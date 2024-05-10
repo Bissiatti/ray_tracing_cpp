@@ -14,6 +14,7 @@ public:
     virtual vec3 getColor() const { } // Retorna a cor da forma
     virtual vec3 getAtt() const {}
     virtual vec3 getNormal() const = 0; // Retorna o vetor normal à forma
+    virtual string getType() const {}
     virtual float rayIntersection(const vec3& origin, const vec3& direction) = 0; // Calcula a interseção entre um raio e a forma
     virtual float rayIntersection(const vec3& origin, const vec3& direction, int id) = 0; // Sobrecarga do método anterior com um identificador adicional
     virtual float rayIntersection(const Ray& ray) = 0; // Sobrecarga do método anterior usando um objeto Ray
@@ -25,16 +26,18 @@ class Plane : public Shape {
 private:
     const vec3 color; // Cor do plano
 public:
+    string type = "Standard";
     vec3 normal; // Vetor normal ao plano
     float d; // Distância do plano à origem
-    Plane(const vec3& n, float d, vec3 c) : normal(n), d(d), color(c) {} // Construtor com parâmetros
+    Plane(const vec3& n, float d, vec3 c, string t) : normal(n), d(d), color(c), type(t) {} // Construtor com parâmetros
     Plane() : normal(vec3(0, 0, 1)), d(0), color(0,1,0) {} // Construtor padrão
-    Plane(float a, float b, float c, float d,float R, float G, float B) : normal(vec3(a, b, c)), d(d), color(vec3(R,G,B)) {} // Construtor com coordenadas separadas e cor
+    Plane(float a, float b, float c, float d,float R, float G, float B, string t) : normal(vec3(a, b, c)), d(d), color(vec3(R,G,B)), type(t) {} // Construtor com coordenadas separadas e cor
 
     // Métodos override da classe Shape
     string getName() const override { return "Plane"; } // Retorna o nome do plano
     vec3 getColor() const override { return color;} // Retorna a cor do plano
     vec3 getNormal() const override { return normal; } // Retorna o vetor normal ao plano
+    string getType() const { return type; } // Retorna o tipo do plano
 
     // Métodos para interseção de raios com o plano
     float rayIntersection(const vec3& origin, const vec3& direction) override {
@@ -67,16 +70,18 @@ public:
     float radius; // Raio da esfera
     vec3 center; // Centro da esfera
     string name = "Sphere"; // Nome da esfera
+    string type = "Standard";
 
     // Construtores da classe Sphere
-    Sphere(float r, vec3 c,vec3 rgb) : radius(r), center(c),color(rgb) {} // Construtor com parâmetros
+    Sphere(float r, vec3 c,vec3 rgb, string t) : radius(r), center(c),color(rgb), type(t) {} // Construtor com parâmetros
     Sphere() : radius(1), center(vec3(0, 0, 0)), color(vec3(1,0,0)) {} // Construtor padrão
-    Sphere(float r, float x, float y, float z,float R, float G, float B) : radius(r), center(vec3(x, y, z)), color(vec3(R,G,B)) {} // Construtor com coordenadas separadas e cor
+    Sphere(float r, float x, float y, float z,float R, float G, float B, string t) : radius(r), center(vec3(x, y, z)), color(vec3(R,G,B)), type(t) {} // Construtor com coordenadas separadas e cor
 
     // Métodos override da classe Shape
     vec3 getNormal() const override { return vec3(0, 0, 0); } // Retorna o vetor normal à esfera
     vec3 getColor() const override { return color; } // Retorna a cor da esfera
     string getName() const override { return name; } // Retorna o nome da esfera
+    string getType() const { return type; } // Retorna o tipo da esfera
 
     // Métodos para interseção de raios com a esfera
     float rayIntersection(const vec3& origin, const vec3& direction) override {
@@ -125,7 +130,7 @@ public:
 class ReflectiveSphere : public Sphere {
 public: 
     string name = "ReflectiveSphere"; // Nome da esfera
-    ReflectiveSphere(float r, const vec3& c, const vec3& rgb) : Sphere(r, c, rgb) {} // Construtor
+    ReflectiveSphere(float r, const vec3& c, const vec3& rgb) : Sphere(r, c, rgb, "Reflective") {} // Construtor
     string getName() const override { return name; } // Retorna o nome da esfera
     // Método para interseção de raios com a esfera fosca
     float rayIntersection(const vec3& origin, const vec3& direction) override {
@@ -157,49 +162,6 @@ public:
     }
 
     // Retorna o centro da esfera fosca
-    vec3 getCenter() const override { return center; }
-};
-
-class MetalSphere : public Sphere {
-public:
-    string name = "MetalSphere"; // Nome da esfera
-    vec3 attenuation;
-    // Construtor
-    MetalSphere(float r, const vec3& c, const vec3& rgb, const vec3& att) : Sphere(r, c, rgb), attenuation(att) {}
-    // Retorna o nome da esfera
-    string getName() const override { return name; }
-    vec3 getAtt() const override { return attenuation; }
-
-
-    // Método para interseção de raios com a esfera reflexiva
-    float rayIntersection(const vec3& origin, const vec3& direction) override {
-        vec3 oc = origin - center;
-        float a = direction.dot(direction);
-        float b = 2.0 * oc.dot(direction);
-        float c = oc.dot(oc) - radius * radius;
-        float discriminant = b * b - 4 * a * c;
-        if (discriminant < 0) {
-            return INFINITY;
-        }
-        float root1 = (-b - sqrt(discriminant)) / (2.0 * a);
-        if (root1 > 0) {
-            return root1;
-        } else {
-            return (-b + sqrt(discriminant)) / (2.0 * a);
-        }
-    }
-
-    // Método para interseção de raios com a esfera reflexiva, sobrecarregado com identificador adicional
-    float rayIntersection(const vec3& origin, const vec3& direction, int id) override {
-        return rayIntersection(origin, direction);
-    }
-
-    // Método para interseção de raios com a esfera reflexiva, sobrecarregado para usar objeto Ray
-    float rayIntersection(const Ray& ray) override {
-        return rayIntersection(ray.origin, ray.direction);
-    }
-     
-    // Retorna o centro da esfera reflexiva
     vec3 getCenter() const override { return center; }
 };
 
