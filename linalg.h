@@ -1,6 +1,23 @@
 #include <iostream>
 #include <cmath>
+#include <limits>
+#include <memory>
+#include <cstdlib>
 #pragma once
+
+
+
+inline double random_double() {
+    // Returns a random real in [0,1).
+    return rand() / (RAND_MAX + 1.0);
+}
+
+inline double random_double(double min, double max) {
+    // Returns a random real in [min,max).
+    return min + (max-min)*random_double();
+
+}
+
 
 class vec4 {
 public:
@@ -120,6 +137,13 @@ public:
             return y;
         } else if (i == 2) {
             return z;
+        }
+    }
+    vec3 max(const vec3& other) const {
+        if (x+ y + z > other.x + other.y + other.z) {
+            return *this;
+        } else {
+            return other;
         }
     }
 
@@ -242,14 +266,6 @@ public:
         return *this;
     }
 
-    vec3 max(const vec3& other) const {
-        if (x+ y + z > other.x + other.y + other.z) {
-            return *this;
-        } else {
-            return other;
-        }
-    }
-
     float length() const {
         return sqrt(x * x + y * y + z * z);
     }
@@ -257,6 +273,16 @@ public:
     vec3 unit() const {
         return *this / length();
     }
+
+    // Diffuse Materials
+    static vec3 random() {
+        return vec3(random_double(), random_double(), random_double());
+    }
+
+    static vec3 random(double min, double max) {
+        return vec3(random_double(min,max), random_double(min,max), random_double(min,max));
+    }
+
 }; 
 
 class matrix3 {
@@ -557,3 +583,33 @@ public:
     }
 };
 
+static vec3 random() {
+    return vec3(random_double(), random_double(), random_double());
+}
+
+static vec3 random(double min, double max) {
+    return vec3(random_double(min,max), random_double(min,max), random_double(min,max));
+}
+
+inline vec3 random_in_unit_sphere() {
+    while (true) {
+        auto p = vec3::random(-1,1);
+        if (p.length() < 1)
+            return p;
+    }
+}
+
+inline vec3 random_unit_vector() {
+    return (random_in_unit_sphere()).unit();
+}
+inline vec3 random_on_hemisphere(const vec3& normal) {
+    vec3 on_unit_sphere = random_unit_vector();
+    if ((on_unit_sphere.dot( normal)) > 0.0) // In the same hemisphere as the normal
+        return on_unit_sphere;
+    else
+        return  on_unit_sphere * -1;
+}
+
+inline vec3 reflect(const vec3& v, const vec3& n) {
+    return v - n* 2 * v.dot(n);
+}
