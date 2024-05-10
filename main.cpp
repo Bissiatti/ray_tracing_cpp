@@ -156,7 +156,8 @@ vector<vec3> Render(vector<Shape*>& scene, Camera cam, Film *film, RectangleLigh
     return film->pixels;
 }
 
-vec3 Intersect(vector<Shape*>& scene, Ray r, Light light, int nSamples, vec3 color, int depth = 0){
+vec3 Intersect(vector<Shape*>& scene, Ray r, Light light, int nSamples, int depth = 0){
+    vec3 color = vec3(0,0,0);
     float minT = INFINITY;
     int i = 0;
     for (int j = 0; j< scene.size(); j++) {
@@ -175,7 +176,7 @@ vec3 Intersect(vector<Shape*>& scene, Ray r, Light light, int nSamples, vec3 col
             if (scene[i]->getType() == "Metal"){
                 vec3 reflectDir = reflect(r.direction,normal);
                 if (depth < 5){
-                    vec3 reflectedColor = Intersect(scene,Ray(pointLocal,reflectDir),light,nSamples,color,depth + 1);
+                    vec3 reflectedColor = Intersect(scene,Ray(pointLocal,reflectDir),light,nSamples,depth + 1);
                     sampleColor += scene[i]->getColor() * reflectedColor; // Multiplica a cor do objeto pela cor refletida
                 }
                 else{
@@ -190,7 +191,7 @@ vec3 Intersect(vector<Shape*>& scene, Ray r, Light light, int nSamples, vec3 col
             if (scene[i]->getType() == "Metal"){
                 vec3 reflectDir = reflect(r.direction,normal);
                 if (depth < 5){
-                    vec3 reflectedColor = Intersect(scene,Ray(pointLocal,reflectDir),light,nSamples,color,depth + 1);
+                    vec3 reflectedColor = Intersect(scene,Ray(pointLocal,reflectDir),light,nSamples,depth + 1);
                     sampleColor += scene[i]->getColor() * reflectedColor; // Multiplica a cor do objeto pela cor refletida
 
                 }
@@ -223,7 +224,7 @@ vector<vec3> Render(vector<Shape*>& scene, Camera cam, Film *film, Light light, 
                 float ny = (float)(y + (double)rand() / RAND_MAX) / film->resolution;
                 // cout << nx << " " << ny << endl;
                 Ray r = cam.generateRay(nx, ny);
-                color = Intersect(scene,r,light,nSamples,color);
+                color = Intersect(scene,r,light,nSamples);
             }
             color /= nSamples;
             film->setPixel(x,y,color);
