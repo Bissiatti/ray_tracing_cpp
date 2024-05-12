@@ -1,0 +1,30 @@
+                Ray r = cam.generateRay(nx, ny);
+                float minT = INFINITY;
+                int i = 0;
+                for (int j = 0; j< scene.size(); j++) {
+                    float t = scene[j]->rayIntersection(r.origin, r.direction,j);
+                    if (t < minT) {
+                        minT = t;
+                        i = j;
+                    }
+                }
+                if (minT < INFINITY) {
+                    vec3 sampleColor = vec3(0, 0, 0); 
+                    vec3 pointLocal = r.origin + r.direction * minT;
+                    vec3 lightDir = (pointLocal - (light.position + light.width*lightX + light.height*lightY)).unit();
+                    if(scene[i]->getName() == "Sphere"){
+                        vec3 normal = (pointLocal - scene[i]->getCenter()).unit();
+                        sampleColor = Radiance(light,pointLocal,normal,lightDir,lightPos,scene,"Sphere",scene[i]->getColor());
+                    }
+                    if (scene[i]->getName() == "Plane") {
+                        vec3 normal = scene[i]->getNormal();
+                        sampleColor = Radiance(light,pointLocal,normal,lightDir,lightPos,scene,"Plane",scene[i]->getColor());
+                    }
+                    color += sampleColor;
+                }
+                if (minT == INFINITY) {
+                    if (light.rayIntersectionArea(r.origin, r.direction)) {
+                        color += light.color*nSamples;
+                    }
+                }
+            }
