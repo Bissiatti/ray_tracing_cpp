@@ -127,46 +127,6 @@ public:
     vec3 getCenter() const override { return center; } // Retorna o centro da esfera
 };
 
-class ReflectiveSphere : public Sphere {
-public: 
-    string name = "ReflectiveSphere"; // Nome da esfera
-    ReflectiveSphere(float r, const vec3& c, const vec3& rgb) : Sphere(r, c, rgb, "Reflective") {} // Construtor
-    string getName() const override { return name; } // Retorna o nome da esfera
-    // Método para interseção de raios com a esfera fosca
-    float rayIntersection(const vec3& origin, const vec3& direction) override {
-        vec3 oc = origin - center;
-        float a = direction.dot(direction);
-        float b = 2.0 * oc.dot(direction);
-        float c = oc.dot(oc) - radius * radius;
-        float discriminant = b * b - 4 * a * c;
-        if (discriminant < 0) {
-            return INFINITY;
-        }
-        float root1 = (-b - sqrt(discriminant)) / (2.0 * a);
-        if (root1 > 0) {
-            return root1;
-        }
-        else {
-            return (-b + sqrt(discriminant)) / (2.0 * a);
-        }
-    }
-
-    // Método para interseção de raios com a esfera fosca, sobrecarregado com identificador adicional
-    float rayIntersection(const vec3& origin, const vec3& direction, int id) override {
-        return rayIntersection(origin, direction);
-    }
-
-    // Método para interseção de raios com a esfera fosca, sobrecarregado para usar objeto Ray
-    float rayIntersection(const Ray& ray) override {
-        return rayIntersection(ray.origin, ray.direction);
-    }
-
-    // Retorna o centro da esfera fosca
-    vec3 getCenter() const override { return center; }
-};
-
-
-
 // Sobrecarga do operador de inserção em stream para a classe Sphere
 ostream& operator<<(ostream& os, const Sphere& s) {
     os << "Sphere(" << s.radius << ", " << s.center << ")";

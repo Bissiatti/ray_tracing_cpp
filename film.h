@@ -27,16 +27,4 @@ public:
         // Calcula o índice correspondente ao pixel na matriz unidimensional de pixels
         pixels[y * resolution + x] = color;
     }
-
-    // Método para tornar a textura da esfera fosca
-    void makeSphereTextureMatte()
-    {
-        // Percorre todos os pixels da imagem
-        for (int i = 0; i < pixels.size(); ++i)
-        {
-            // Torna a cor do pixel mais escura (fosca) multiplicando-a por um fator de atenuação
-            // Isso simula uma textura fosca na superfície da esfera
-            pixels[i] *= 0.5; // Pode ajustar o valor conforme necessário para a aparência desejada
-        }
-    }
 };
