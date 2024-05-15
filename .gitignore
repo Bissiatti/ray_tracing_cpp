@@ -1,6 +1,6 @@
-output.ppm
-*.ppm
+# *.ppm
 *.png
 *.vs
 *.exe
 *.vscode
+*.pdf
