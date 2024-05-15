@@ -1,4 +1,4 @@
-# Ray Tracing basic algoritmh on C++
+# C++ Ray Tracing algorithm
 
 ## English
 
